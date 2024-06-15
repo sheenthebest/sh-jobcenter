@@ -2,6 +2,9 @@
 
 This project provides a customizable Job Center UI for FiveM, allowing players to choose various job roles within the game.
 
+## Showcase
+![Screenshot](https://github.com/sheenthebest/sh-jobcenter/blob/main/html/imgs/showcase.jpg?raw=true)
+
 ## Features
 
 - Display multiple job roles with descriptions, images, and tags.
@@ -25,8 +28,8 @@ This project provides a customizable Job Center UI for FiveM, allowing players t
      ```
 
 ### Configuration
-Open `config.lua` to edit accessible locations.
-Update `config.js` to customize job details and UI text.
+- Open `config.lua` to edit accessible locations.
+- Update `config.js` to customize job details and UI text.
 
 ```javascript
 const jobList = [
