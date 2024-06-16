@@ -46,6 +46,7 @@ end)
 -- setup points --
 local radius = config.job_centers.radius
 local draw_distance = config.job_centers.draw_distance
+local open = config.texts.open
 for _, pos in each(config.job_centers.locations) do
     local point = lib.points.new({
         coords = pos,
@@ -53,7 +54,7 @@ for _, pos in each(config.job_centers.locations) do
     })
     
     function point:nearby()
-        Draw3DText(self.coords.x, self.coords.y, self.coords.z, config.texts.open)
+        Draw3DText(self.coords.x, self.coords.y, self.coords.z, open)
 
         if self.currentDistance < radius and IsControlJustReleased(0, 38) then
             OpenUI()
