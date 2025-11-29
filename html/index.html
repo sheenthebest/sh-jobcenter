@@ -6,18 +6,57 @@
     <title>Job Center by sheen</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-    <script src="config.js"></script>
-    <script src="script.js"></script>
 </head>
 <body>
-    <div id="job-center">
-        <div class="header">
-            <h1 id="job-center-title"></h1>
-            <button id="close-button"></button>
-        </div>
-        <div id="job-list"></div>
+    <div id="app">
+        <transition name="fade">
+            <div v-if="isVisible" class="job-center-wrapper">
+                <div class="job-header">
+                    <h1>{{ texts.jobCenterTitle }}</h1>
+                    <button class="close-btn" @click="closeUI">{{ texts.closeButton }}</button>
+                </div>
+                <div class="job-container">
+                    <div class="job-grid">
+                        <div 
+                            v-for="(job, index) in jobs" 
+                            :key="index" 
+                            class="job-card">
+                            <img 
+                                :src="job.image" 
+                                :alt="job.label"
+                                loading="lazy"
+                                decoding="async">
+                            <div class="job-body">
+                                <div class="job-top">
+                                    <div class="job-name">
+                                        {{ job.label }}
+                                        <span v-if="job.recommended" class="star">★</span>
+                                    </div>
+                                    <div class="job-salary">{{ job.pay }}</div>
+                                </div>
+                                <div class="job-desc">
+                                    <p v-html="job.description"></p>
+                                </div>
+                                <div class="job-badges">
+                                    <span 
+                                        v-for="tag in job.tags" 
+                                        :key="tag" 
+                                        class="badge">{{ tag }}</span>
+                                </div>
+                                <button 
+                                    class="job-apply-btn" 
+                                    @click="applyForJob(job)">{{ texts.applyButton }}</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </transition>
     </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script src="https://unpkg.com/vue@3.2.31/dist/vue.global.prod.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>

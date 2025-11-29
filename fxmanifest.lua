@@ -4,7 +4,7 @@ lua54 'yes'
 
 author 'sheen'
 description 'Job Center'
-version '1.0'
+version '2.0'
 
 shared_scripts {
     '@ox_lib/init.lua',
@@ -25,11 +25,6 @@ files {
     
     'html/imgs/**.png',
     'html/index.html', 
-    'html/config.js',
     'html/script.js',
     'html/styles.css'
-}
-
-escrow_ignore {
-    '**.lua',
 }

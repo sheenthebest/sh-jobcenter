@@ -1,63 +1,92 @@
--- variables
+-- Variables
 local config = require 'config'
+local isUIOpen = false
+local textUIShown = false
 
--- functions --
-local function Draw3DText(x, y, z, text)
-	local onScreen, _x, _y = World3dToScreen2d(x, y, z)
-    local px,py,pz=table.unpack(GetGameplayCamCoords())
-    local dist = #(vec3(px,py,pz) - vec3(x,y,z))
-
-    local scale = (1/dist)*2
-    local fov = (1/GetGameplayCamFov())*100
-    
-	if onScreen then
-		SetTextScale(0.4, 0.4)
-		SetTextFont(4)
-		SetTextProportional(1)
-		SetTextColour(255, 255, 255, 215)
-		SetTextDropShadow(0, 0, 0, 55)
-		SetTextEdge(0, 0, 0, 150)
-		SetTextDropShadow()
-		SetTextOutline()
-		SetTextCentre(1)
-        SetTextEntry("STRING")
-		AddTextComponentString(text)
-		DrawText(_x,_y)
-	end
-end
-
--- main functions --
+-- Functions
 local function OpenUI()
+    if isUIOpen then return end
+    
+    isUIOpen = true
     SetNuiFocus(true, true)
-    SendNUIMessage({ action = 'SHOW_UI' })
-end
-
--- NUI Callbacks --
-RegisterNUICallback('CLOSE_UI', function()
-    SetNuiFocus(false, false)
-end)
-
-RegisterNUICallback('APPLY_JOB', function(data)
-    if not data.name then return end
-
-    local result = lib.callback.await('sh-jobcenter:ApplyJob', false, data.name)
-end)
-
--- setup points --
-local radius = config.job_centers.radius
-local draw_distance = config.job_centers.draw_distance
-local open = config.texts.open
-for _, pos in each(config.job_centers.locations) do
-    local point = lib.points.new({
-        coords = pos,
-        distance = draw_distance
+    SendNUIMessage({
+        action = 'SHOW_UI',
+        jobs = config.jobs,
+        texts = config.texts
     })
     
-    function point:nearby()
-        Draw3DText(self.coords.x, self.coords.y, self.coords.z, open)
+    if textUIShown then
+        lib.hideTextUI()
+        textUIShown = false
+    end
+end
 
-        if self.currentDistance < radius and IsControlJustReleased(0, 38) then
-            OpenUI()
+local function CloseUI()
+    if not isUIOpen then return end
+    
+    isUIOpen = false
+    SetNuiFocus(false, false)
+end
+
+-- NUI Callbacks
+RegisterNUICallback('CLOSE_UI', function(data, cb)
+    CloseUI()
+    cb('ok')
+end)
+
+RegisterNUICallback('APPLY_JOB', function(data, cb)
+    if not data.name then
+        cb('error')
+        return
+    end
+
+    local result = lib.callback.await('sh-jobcenter:ApplyJob', false, data.name)
+    cb('ok')
+end)
+
+-- Setup job center points
+local function SetupJobCenters()
+    for _, pos in ipairs(config.job_centers.locations) do
+        local point = lib.points.new({
+            coords = pos,
+            distance = config.job_centers.radius
+        })
+        
+        function point:onEnter()
+            if not isUIOpen then
+                lib.showTextUI(config.texts.open, {
+                    position = "left-center",
+                    icon = 'briefcase'
+                })
+                textUIShown = true
+            end
+        end
+        
+        function point:onExit()
+            if textUIShown then
+                lib.hideTextUI()
+                textUIShown = false
+            end
+        end
+        
+        function point:nearby()
+            if self.currentDistance < config.job_centers.radius then
+                if IsControlJustReleased(0, 38) and not isUIOpen then
+                    OpenUI()
+                end
+            end
         end
     end
 end
+
+-- Initialize
+CreateThread(function()
+    SetupJobCenters()
+end)
+
+-- Handler
+AddEventHandler('onResourceStop', function(resourceName)
+    if cache.resource ~= resourceName then return end
+    if textUIShown then lib.hideTextUI() end
+    if isUIOpen then CloseUI() end
+end)

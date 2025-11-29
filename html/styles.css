@@ -1,8 +1,14 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
 body {
-    font-family: 'Roboto', sans-serif;
-    background: rgba(0, 0, 0, 0);
+    font-family: 'Inter', sans-serif;
+    background: transparent;
     color: #fff;
     display: flex;
     justify-content: center;
@@ -12,243 +18,318 @@ body {
     overflow: hidden;
 }
 
-#job-center {
-    background: linear-gradient(to bottom right, #1e1e1e, #2a2a2a);
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-    width: 80%;
-    max-width: 1200px;
-    max-height: 80vh; 
-    overflow-y: auto;
-    position: relative;
-    animation: fadeIn 1s ease-in-out;
+#app {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
 }
 
-.header {
+/* Transition */
+.fade-enter-active {
+    animation: fadeInUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.fade-leave-active {
+    animation: fadeOut 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+        transform: scale(1);
+    }
+    to {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+}
+
+.job-center-wrapper {
+    background: rgba(20, 20, 20, 0.95);
+    border-radius: 20px;
+    width: 100%;
+    max-width: 1400px;
+    height: 90vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    overflow: hidden;
+}
+
+/* Header */
+.job-header {
+    padding: 28px 36px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.15) 100%);
+    flex-shrink: 0;
 }
 
 h1 {
-    font-size: 36px;
+    font-size: 32px;
+    font-weight: 700;
     margin: 0;
-    color: #4CAF50;
-    font-weight: bold;
-    position: relative;
-    transition: transform 0.3s ease;
-}
-h1:hover {
-    transform: scale(1.05);
+    color: #ffffff;
+    letter-spacing: -0.5px;
 }
 
-#close-button {
-    background: none;
-    border: none;
-    color: #fff;
-    font-size: 28px;
+.close-btn {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 18px;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
     cursor: pointer;
-    transition: color 0.3s ease, transform 0.3s ease;
-    z-index: 10; 
-}
-#close-button:hover {
-    color: #f44336;
-    transform: scale(1.2);
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    padding: 0;
 }
 
-#job-list {
+.close-btn:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.25);
+    transform: rotate(90deg);
+}
+
+/* Container */
+.job-container {
+    flex: 1;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    padding: 32px;
+    contain: layout style paint;
+    will-change: scroll-position;
+}
+
+.job-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-    gap: 30px;
-    padding-right: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 24px;
 }
 
-.job-item {
-    background-color: #333;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    text-align: center;
-    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
-    position: relative;
+/* Job Cards */
+.job-card {
+    background: rgba(30, 30, 30, 0.6);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
     overflow: hidden;
-    animation: slideIn 0.5s ease forwards;
-    opacity: 0;
+    transition: all 0.3s ease;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    height: 465px;
+    will-change: transform;
 }
-.job-item:nth-child(odd) {
-    animation-delay: 0.1s;
+
+.job-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(255, 255, 255, 0.12);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+    background: rgba(35, 35, 35, 0.7);
 }
-.job-item:nth-child(even) {
-    animation-delay: 0.2s;
-}
-.job-item:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-}
-.job-item img {
+
+.job-card img {
     width: 100%;
-    height: auto;
-    border-radius: 10px;
-    margin-bottom: 15px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-    transition: transform 0.3s ease;
-}
-.job-item img:hover {
-    transform: scale(1.05);
-}
-
-.job-title {
-    font-size: 24px;
-    margin-bottom: 10px;
-    color: #FFD700;
-    font-weight: bold;
-    position: relative;
-}
-.job-title .recommended {
-    color: #FFD700;
-    margin-left: 5px;
-    font-size: 20px;
+    height: 180px;
+    object-fit: cover;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    background: rgba(40, 40, 40, 0.5);
+    image-rendering: auto;
+    image-rendering: crisp-edges;
+    image-rendering: -webkit-optimize-contrast;
 }
 
-.job-pay {
-    color: #4CAF50;
-    font-size: 18px;
-    margin-bottom: 10px;
-    font-weight: bold;
+.job-card img:not([src]) {
+    opacity: 0;
 }
 
-.job-description {
-    font-size: 14px;
-    margin-bottom: 5px;
-    color: #ddd;
-    overflow-y: auto;
-    flex-grow: 1;
-    padding: 0 10px 0 0;
-    border-radius: 10px;
-    transition: overflow 0.3s ease;
+.job-card img[src] {
+    animation: fadeInImage 0.3s ease;
 }
 
-.job-tags {
+@keyframes fadeInImage {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.job-body {
+    padding: 20px;
     display: flex;
-    justify-content: center;
-    gap: 5px;
-    flex-wrap: wrap;
-    margin-top: 5px;
-    margin-bottom: 10px;
-    cursor: default;
+    flex-direction: column;
+    gap: 12px;
 }
 
-.job-tag {
-    background-color: #555;
-    padding: 5px 10px;
-    border-radius: 5px;
-    font-size: 12px;
-    color: #fff;
-    transition: background-color 0.3s ease;
-}
-.job-tag:hover {
-    background-color: #4CAF50;
+.job-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
 }
 
-.apply-button {
-    padding: 10px 20px;
-    background: linear-gradient(to right, #FFC107, #FFD54F);
-    color: #000;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: bold;
-    transition: background-color 0.3s ease, transform 0.3s ease, color 0.3s ease;
-}
-.apply-button:hover {
-    background: linear-gradient(to right, #ffa000, #ffc107);
-    transform: scale(1.1);
-}
-.apply-button:active {
-    background-color: #ff8c00;
+.job-name {
+    font-size: 20px;
+    font-weight: 700;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
-.job-item:hover .apply-button {
-    background-color: #ffc107;
-}
-.job-item:hover .apply-button:hover {
-    background-color: #ffa000;
+.star {
+    color: #ffd700;
+    font-size: 18px;
 }
 
-#job-center::-webkit-scrollbar {
-    width: 12px;
-}
-#job-center::-webkit-scrollbar-track {
-    background: #2a2a2a;
-    border-radius: 10px;
-}
-#job-center::-webkit-scrollbar-thumb {
-    background: #4CAF50;
-    border-radius: 10px;
-}
-#job-center::-webkit-scrollbar-thumb:hover {
-    background: #45a049;
+.job-salary {
+    background: rgba(0, 255, 136, 0.12);
+    color: #00ff88;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
+    border: 1px solid rgba(0, 255, 136, 0.2);
 }
 
-.job-description::-webkit-scrollbar {
-    width: 2px;
-}
-.job-description::-webkit-scrollbar-track {
-    background: #444;
-    border-radius: 10px;
-}
-.job-description::-webkit-scrollbar-thumb {
-    background: #4CAF50;
-    border-radius: 10px;
-}
-.job-description::-webkit-scrollbar-thumb:hover {
-    background: #45a049;
-}
-
-#toast-container > .toast {
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    font-family: 'Roboto', sans-serif;
-}
-#toast-container > .toast-success {
-    background-color: #4CAF50;
-}
-#toast-container > .toast-error {
-    background-color: #f44336;
-}
-#toast-container > .toast-info {
-    background-color: #2196F3;
-}
-#toast-container > .toast-warning {
-    background-color: #FFC107;
-}
-#toast-container > .toast-message {
+.job-desc {
     font-size: 14px;
     line-height: 1.6;
-    margin-left: 30px;
-    white-space: normal;
-}
-#toast-container > .toast-title {
-    font-weight: bold;
-    font-size: 16px;
+    color: rgba(255, 255, 255, 0.6);
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: scale(0.95); }
-    to { opacity: 1; transform: scale(1); }
+.job-desc p {
+    margin: 0;
 }
-@keyframes fadeOut {
-    from { opacity: 1; transform: scale(1); }
-    to { opacity: 0; transform: scale(0.95); }
+
+.job-desc strong {
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 600;
 }
-@keyframes slideIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+
+.job-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    justify-content: center;
+}
+
+.badge {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 5px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.7);
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.badge:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.job-apply-btn {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(145deg, #2d2d2d, #1a1a1a);
+    color: #00ff88;
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 8px;
+}
+
+.job-apply-btn:hover {
+    background: linear-gradient(145deg, #353535, #1f1f1f);
+    border-color: rgba(0, 255, 136, 0.5);
+    color: #00ff99;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0, 255, 136, 0.2);
+}
+
+.job-apply-btn:active {
+    transform: translateY(0);
+}
+
+/* Scrollbar */
+.job-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.job-container::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.job-container::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 4px;
+}
+
+.job-container::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+/* Toastr */
+#toast-container > .toast {
+    border-radius: 10px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+    font-family: 'Inter', sans-serif;
+    opacity: 1 !important;
+}
+
+#toast-container > .toast-success {
+    background-color: #1a1a1a !important;
+    border: 1px solid rgba(0, 255, 136, 0.3);
+}
+
+#toast-container > .toast-success .toast-message {
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+
+#toast-container > .toast-success .toast-title {
+    color: #00ff88 !important;
+}
+
+#toast-container .toast-message {
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.5;
+}
+
+#toast-container .toast-title {
+    font-weight: 600;
+    font-size: 15px;
+    margin-bottom: 4px;
 }
