@@ -2,6 +2,9 @@
 
 This project provides a customizable Job Center UI for FiveM, allowing players to choose various job roles within the game.
 
+## Showcase
+![Screenshot](https://forum-cfx-re.akamaized.net/original/5X/b/0/6/3/b0635a05d315ae885b4ce4868206e3c8223b4d15.jpeg?raw=true)
+
 ## Features
 
 - Display multiple job roles with descriptions, images, and tags.
